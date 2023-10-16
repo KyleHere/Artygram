@@ -10,4 +10,4 @@ likes = db.Table(
 )
 
 if environment == "production":
-    self.schema = SCHEMA
+    likes.schema = SCHEMA
