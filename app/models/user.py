@@ -7,9 +7,13 @@ from .like import likes
 Followers = db.Table(
     "followers",
     db.Column("followerId", db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"))),
-    db.Column("followingId", db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"))),
+    db.Column(
+        "followingId", db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"))
+    ),
     db.Column("timestamp", db.DateTime, default=datetime.now),
 )
+if environment == "production":
+    Followers.schema = SCHEMA
 
 
 class User(db.Model, UserMixin):
@@ -60,7 +64,6 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password, password)
 
     def to_dict(self):
-
         return {
             "id": self.id,
             "username": self.username,
