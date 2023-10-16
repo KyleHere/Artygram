@@ -36,7 +36,7 @@ function User() {
     const obj = await response.json();
 
     setUser({ ...obj.otherUser });
-    // console.log()
+
     setIsFollowing(!isFollowing);
   };
 

@@ -26,7 +26,7 @@ const HomePage = () => {
     array.push(Math.floor(Math.random() * max) + min)
     array.push(Math.floor(Math.random() * max) + min)
     array.push(Math.floor(Math.random() * max) + min)
-    // console.log(array)
+
   }
 
   useEffect(() => {

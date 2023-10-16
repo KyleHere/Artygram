@@ -42,7 +42,6 @@ def likeOnPost(id):
     loggedUser = current_user
     otherUser = User.query.get(id)
 
-    # print('this is the post!!!!!!!!!!!', dir(post.postLikes))
     # post.postLikes.append(int(user.id))
 
     # post.postLikes is a list contains the User object. not the user.id
@@ -57,6 +56,4 @@ def likeOnPost(id):
         loggedUser.follows.append(otherUser)
 
     db.session.commit()
-    # print('this is the post!!!!!!!!!!!', post.postLikes)
     return {'loggedUser': loggedUser.to_dict(), 'otherUser': otherUser.to_dict()}
-
