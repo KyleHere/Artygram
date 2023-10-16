@@ -40,7 +40,7 @@ def upgrade():
         "users", sa.Column("profile_pic", sa.String(length=255), nullable=True)
     )
     if environment == "production":
-        op.execute(f"ALTER TABLE <table_name> SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE followers SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 
