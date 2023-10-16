@@ -6,8 +6,8 @@ from .like import likes
 
 Followers = db.Table(
     "followers",
-    db.Column("followerId", db.Integer, db.ForeignKey("users.id")),
-    db.Column("followingId", db.Integer, db.ForeignKey("users.id")),
+    db.Column("followerId", db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"))),
+    db.Column("followingId", db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"))),
     db.Column("timestamp", db.DateTime, default=datetime.now),
 )
 

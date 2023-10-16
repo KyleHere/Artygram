@@ -8,8 +8,8 @@ class Comment(db.Model):
         __table_args__ = {"schema": SCHEMA}
     id = db.Column(db.Integer, primary_key=True)
     caption = db.Column(db.String(255), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("posts.id")))
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")))
     timestamp = db.Column(db.DateTime, default=datetime.now)
 
     users = db.relationship("User", back_populates="comments")
