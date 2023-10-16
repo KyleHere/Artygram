@@ -1,4 +1,4 @@
-from .db import db
+from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
@@ -8,13 +8,14 @@ Followers = db.Table(
     "followers",
     db.Column("followerId", db.Integer, db.ForeignKey("users.id")),
     db.Column("followingId", db.Integer, db.ForeignKey("users.id")),
-    db.Column("timestamp", db.DateTime, default=datetime.now)
+    db.Column("timestamp", db.DateTime, default=datetime.now),
 )
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
-
+    __tablename__ = "users"
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
@@ -23,12 +24,12 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
 
     follows = db.relationship(
-        'User',
+        "User",
         secondary=Followers,
         primaryjoin=(Followers.c.followerId == id),
         secondaryjoin=(Followers.c.followingId == id),
-        backref=db.backref('follow_by', lazy='dynamic'),
-        lazy='dynamic'
+        backref=db.backref("follow_by", lazy="dynamic"),
+        lazy="dynamic",
     )
 
     # followers = db.relationship(
@@ -43,8 +44,8 @@ class User(db.Model, UserMixin):
     # follows = db.relationship('User', secondary=Followers, primaryjoin=(Followers.c.followerId == id),secondaryjoin=(Followers.c.followingId == id), back_populates='follow_by')
     # follow_by = db.relationship('User', secondary=Followers, primaryjoin=(Followers.c.followingId == id),secondaryjoin=(Followers.c.followerId == id), back_populates='follows')
 
-    posts = db.relationship('Post', back_populates="users")
-    comments = db.relationship('Comment', back_populates="users")
+    posts = db.relationship("Post", back_populates="users")
+    comments = db.relationship("Comment", back_populates="users")
     userLikes = db.relationship("Post", secondary=likes, back_populates="postLikes")
 
     @property
@@ -62,11 +63,15 @@ class User(db.Model, UserMixin):
         # print(self.followers)
 
         return {
-            'id': self.id,
-            'username': self.username,
-            'email': self.email,
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
             "bio": self.bio,
             "profile_pic": self.profile_pic,
-            "follows": [{'id': user.id, 'username': user.username} for user in self.follows],
-            "follow_by": [{'id': user.id, 'username': user.username} for user in self.follow_by]
+            "follows": [
+                {"id": user.id, "username": user.username} for user in self.follows
+            ],
+            "follow_by": [
+                {"id": user.id, "username": user.username} for user in self.follow_by
+            ],
         }
